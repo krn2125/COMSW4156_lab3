@@ -2,7 +2,11 @@ package dev.coms4156.project.individualproject.controller;
 
 import dev.coms4156.project.individualproject.model.Book;
 import dev.coms4156.project.individualproject.service.MockApiService;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -102,4 +106,44 @@ public class RouteController {
     }
   }
 
+  /**
+   * Returns a list of 10 recommended books.
+   *
+   * @return A {@code ResponseEntity} containing a list of recommended {@code Book} objects with an
+   *         HTTP 200 response if sucessful, or a message indicating an error occurred with an
+   *         HTTP 500 response.
+   */
+  @GetMapping({"/books/recommendation"})
+  public ResponseEntity<?> getRecommendedBooks() {
+    try {
+      ArrayList<Book> recommendedBooks = new ArrayList<>();
+      ArrayList<Book> allBooks = mockApiService.getBooks();
+
+      if (allBooks.size() < 10) {
+        return new ResponseEntity<>("Error occurred, not enough books",
+              HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+
+      List<Book> popularBooks = new ArrayList<>(allBooks);
+      Collections.sort(popularBooks, new Comparator<Book>() {
+        @Override
+        public int compare(Book o1, Book o2) {
+          return Integer.compare(o1.getAmountOfTimesCheckedOut(), o2.getAmountOfTimesCheckedOut());
+        }
+      });
+
+      for (int i = 0; i < 5; i++) {
+        recommendedBooks.add(popularBooks.get(i));
+        allBooks.remove(popularBooks.get(i));
+      }
+      for (int i = 0; i < 5; i++) {
+        recommendedBooks.add(allBooks.get(i));
+      }
+      return new ResponseEntity<>(recommendedBooks, HttpStatus.OK);
+    } catch (Exception e) {
+      System.err.println(e);
+      return new ResponseEntity<>("Error occurred when getting recommended books",
+            HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }
