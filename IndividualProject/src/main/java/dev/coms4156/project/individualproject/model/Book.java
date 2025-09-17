@@ -3,22 +3,23 @@ package dev.coms4156.project.individualproject.model;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class defines the Book model.
  */
 public class Book implements Comparable<Book> {
   private String title;
-  private ArrayList<String> authors;
+  private List<String> authors;
   private String language;
   private String shelvingLocation;
   private String publicationDate;
   private String publisher;
-  private ArrayList<String> subjects;
+  private List<String> subjects;
   private int id;
   private int amountOfTimesCheckedOut;
   private int copiesAvailable;
-  private ArrayList<String> returnDates;
+  private List<String> returnDates;
   private int totalCopies;
 
   /**
@@ -27,7 +28,7 @@ public class Book implements Comparable<Book> {
    * @param title The title of the book.
    * @param id The id of the book.
    */
-  public Book(String title, int id) {
+  public Book(final String title, final int id) {
     this.title = title;
     this.id = id;
     this.authors = new ArrayList<>();
@@ -56,9 +57,10 @@ public class Book implements Comparable<Book> {
    * @param copiesAvailable number of copies available of the book.
    * @param totalCopies number of available and checked-out copies of the book.
    */
-  public Book(String title, ArrayList<String> authors, String language, String shelvingLocation,
-              String publicationDate, String publisher, ArrayList<String> subjects,
-              int id, int copiesAvailable, int totalCopies) {
+  public Book(final String title, final List<String> authors, final String language,
+              final String shelvingLocation,
+              final String publicationDate, final String publisher, final List<String> subjects,
+              final int id, final int copiesAvailable, final int totalCopies) {
     this.title = title;
     this.authors = authors;
     this.language = language;
@@ -131,9 +133,9 @@ public class Book implements Comparable<Book> {
     if (copiesAvailable > 0) {
       copiesAvailable--;
       amountOfTimesCheckedOut++;
-      LocalDate today = LocalDate.now();
-      LocalDate dueDate = today.plusWeeks(2);
-      String dueDateStr = dueDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+      final LocalDate today = LocalDate.now();
+      final LocalDate dueDate = today.plusWeeks(2);
+      final String dueDateStr = dueDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
       returnDates.add(dueDateStr);
       return dueDateStr;
     }
@@ -148,7 +150,7 @@ public class Book implements Comparable<Book> {
    * @return {@code true} if the return was successful and a matching date was removed;
    *         {@code false} if no matching due date is found.
    */
-  public boolean returnCopy(String date) {
+  public boolean returnCopy(final String date) {
     if (!returnDates.isEmpty()) {
       for (int i = 0; i < returnDates.size(); i++) {
         if (returnDates.get(i).equals(date)) {
@@ -167,15 +169,15 @@ public class Book implements Comparable<Book> {
     return title;
   }
 
-  public void setTitle(String title) {
+  public void setTitle(final String title) {
     this.title = title;
   }
 
-  public ArrayList<String> getAuthors() {
+  public List<String> getAuthors() {
     return authors;
   }
 
-  public void setAuthors(ArrayList<String> authors) {
+  public void setAuthors(final List<String> authors) {
     this.authors = authors;
   }
 
@@ -183,7 +185,7 @@ public class Book implements Comparable<Book> {
     return language;
   }
 
-  public void setLanguage(String language) {
+  public void setLanguage(final String language) {
     this.language = language;
   }
 
@@ -191,7 +193,7 @@ public class Book implements Comparable<Book> {
     return shelvingLocation;
   }
 
-  public void setShelvingLocation(String shelvingLocation) {
+  public void setShelvingLocation(final String shelvingLocation) {
     this.shelvingLocation = shelvingLocation;
   }
 
@@ -199,7 +201,7 @@ public class Book implements Comparable<Book> {
     return publicationDate;
   }
 
-  public void setPublicationDate(String publicationDate) {
+  public void setPublicationDate(final String publicationDate) {
     this.publicationDate = publicationDate;
   }
 
@@ -207,15 +209,15 @@ public class Book implements Comparable<Book> {
     return publisher;
   }
 
-  public void setPublisher(String publisher) {
+  public void setPublisher(final String publisher) {
     this.publisher = publisher;
   }
 
-  public ArrayList<String> getSubjects() {
+  public List<String> getSubjects() {
     return subjects;
   }
 
-  public void setSubjects(ArrayList<String> subjects) {
+  public void setSubjects(final List<String> subjects) {
     this.subjects = subjects;
   }
 
@@ -223,7 +225,7 @@ public class Book implements Comparable<Book> {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(final int id) {
     this.id = id;
   }
 
@@ -235,11 +237,11 @@ public class Book implements Comparable<Book> {
     return copiesAvailable;
   }
 
-  public ArrayList<String> getReturnDates() {
+  public List<String> getReturnDates() {
     return returnDates;
   }
 
-  public void setReturnDates(ArrayList<String> returnDates) {
+  public void setReturnDates(final List<String> returnDates) {
     this.returnDates = returnDates != null ? returnDates : new ArrayList<>();
   }
 
@@ -247,17 +249,17 @@ public class Book implements Comparable<Book> {
     return totalCopies;
   }
 
-  public void setTotalCopies(int totalCopies) {
+  public void setTotalCopies(final int totalCopies) {
     this.totalCopies = totalCopies;
   }
 
   @Override
-  public int compareTo(Book other) {
+  public int compareTo(final Book other) {
     return Integer.compare(this.id, other.id);
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -266,7 +268,7 @@ public class Book implements Comparable<Book> {
       return false;
     }
 
-    Book cmpBook = (Book) obj;
+    final Book cmpBook = (Book) obj;
     return cmpBook.id == this.id;
   }
 

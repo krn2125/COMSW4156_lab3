@@ -2,14 +2,17 @@ package dev.coms4156.project.individualproject.controller;
 
 import dev.coms4156.project.individualproject.model.Book;
 import dev.coms4156.project.individualproject.service.MockApiService;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * This class contains all the API routes for the application.
@@ -19,7 +22,7 @@ public class RouteController {
 
   private final MockApiService mockApiService;
 
-  public RouteController(MockApiService mockApiService) {
+  public RouteController(final MockApiService mockApiService) {
     this.mockApiService = mockApiService;
   }
 
@@ -59,9 +62,9 @@ public class RouteController {
   @GetMapping({"/books/available"})
   public ResponseEntity<?> getAvailableBooks() {
     try {
-      ArrayList<Book> availableBooks = new ArrayList<>();
+      final List<Book> availableBooks = new ArrayList<>();
 
-      for (Book book : mockApiService.getBooks()) {
+      for (final Book book : mockApiService.getBooks()) {
         if (book.hasCopies()) {
           availableBooks.add(book);
         }
@@ -69,7 +72,6 @@ public class RouteController {
 
       return new ResponseEntity<>(availableBooks, HttpStatus.OK);
     } catch (Exception e) {
-//      System.err.println(e);
       return new ResponseEntity<>("Error occurred when getting all available books",
           HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -86,9 +88,9 @@ public class RouteController {
    *         or a message indicating an error occurred with an HTTP 500 code.
    */
   @PatchMapping({"/book/{bookId}/add"})
-  public ResponseEntity<?> addCopy(@PathVariable Integer bookId) {
+  public ResponseEntity<?> addCopy(final @PathVariable Integer bookId) {
     try {
-      for (Book book : mockApiService.getBooks()) {
+      for (final Book book : mockApiService.getBooks()) {
         if (bookId.equals(book.getId())) {
           book.addCopy();
           return new ResponseEntity<>(book, HttpStatus.OK);
@@ -97,7 +99,7 @@ public class RouteController {
 
       return new ResponseEntity<>("Book not found.", HttpStatus.NOT_FOUND);
     } catch (Exception e) {
-//      System.err.println(e);
+      System.err.println(e);
       return new ResponseEntity<>("Error occurred when adding a copy.",
           HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -106,22 +108,21 @@ public class RouteController {
   /**
    * Returns a list of 10 recommended books.
    *
-   * @return A {@code ResponseEntity} containing a list of recommended {@code Book} objects with an
-   *         HTTP 200 response if successful, or a message indicating an error occurred with an
-   *         HTTP 500 response.
+   * @return A {@code ResponseEntity} containing a list of recommended books.
    */
   @GetMapping({"/books/recommendation"})
   public ResponseEntity<?> getRecommendedBooks() {
     try {
-      ArrayList<Book> recommendedBooks = new ArrayList<>();
-      ArrayList<Book> allBooks = mockApiService.getBooks();
+      final List<Book> recommendedBooks = new ArrayList<>();
+      final List<Book> allBooks = mockApiService.getBooks();
 
-      if (allBooks.size() < 10) {
+      final int neededNum = 10;
+      if (allBooks.size() < neededNum) {
         return new ResponseEntity<>("Error occurred, not enough books",
               HttpStatus.INTERNAL_SERVER_ERROR);
       }
 
-      List<Book> popularBooks = new ArrayList<>(allBooks);
+      final List<Book> popularBooks = new ArrayList<>(allBooks);
       popularBooks.sort(Comparator.comparingInt(Book::getAmountOfTimesCheckedOut).reversed());
 
       for (int i = 0; i < 5; i++) {
@@ -140,17 +141,24 @@ public class RouteController {
     }
   }
 
+  /**
+   * Action of checking out a book.
+   *
+   * @param bookId ID of book to-be-checked-out.
+   * @return A {@code ResponseEntity} containing the checked-out {@code Book} object.
+   */
+
   @GetMapping("/checkout")
-  public ResponseEntity<?> checkout(@RequestParam int bookId) {
+  public ResponseEntity<?> checkout(final @RequestParam int bookId) {
     try {
-      ArrayList<Book> allBooks = mockApiService.getBooks();
+      final List<Book> allBooks = mockApiService.getBooks();
 
       if (allBooks == null) {
         return new ResponseEntity<>("No books.", HttpStatus.INTERNAL_SERVER_ERROR);
       }
 
       Book checkedOut = null;
-      for (Book book : allBooks) {
+      for (final Book book : allBooks) {
         if (book.getId() == bookId) {
           checkedOut = book;
           break;
