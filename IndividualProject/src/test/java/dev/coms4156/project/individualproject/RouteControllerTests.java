@@ -1,26 +1,33 @@
 package dev.coms4156.project.individualproject;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import dev.coms4156.project.individualproject.controller.RouteController;
 import dev.coms4156.project.individualproject.model.Book;
 import dev.coms4156.project.individualproject.service.MockApiService;
-//import org.apache.coyote.Response;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * This class contains the unit tests for the RouteController class.
  */
 @SpringBootTest
- class RouteControllerTests {
+final class RouteControllerTests {
+  /**
+   * RouteController.
+   */
+  /* package */ private static RouteController route;
 
-    /**
-     * RouteController.
-     */
-    /* package */ private static RouteController route;
+  private RouteControllerTests() {
+    // Private constructor to prevent PMD error.
+  }
 
   /**
   * Javadoc for BeforeAll functionality.
@@ -30,8 +37,12 @@ import static org.junit.jupiter.api.Assertions.*;
     final MockApiService mock = new MockApiService();
     if (mock.getBooks() != null) {
       mock.getBooks().clear();
+      Book book = new Book();
+      book.setId(1);
+      book.setTitle("Book 1");
       mock.getBooks().add(new Book());
       mock.getBooks().add(new Book());
+      mock.getBooks().add(book);
     }
     route = new RouteController(mock);
   }
@@ -44,118 +55,131 @@ import static org.junit.jupiter.api.Assertions.*;
 
   @Test
    void bookTest() {
-    final ResponseEntity<?> response = route.getBook(1);
-    assertEquals(404, response.getStatusCode().value(), "Should receive an error code");
+    final ResponseEntity<?> response = route.getBook(99);
+    HttpStatusCode status = response.getStatusCode();
+    assertEquals(HttpStatus.NOT_FOUND, status, "Should receive an error code");
+  }
+
+  @Test
+  void secondBookTest() {
+    final ResponseEntity<?> response = route.getBook(99);
     assertFalse(response.getBody() instanceof Book);
   }
 
   @Test
     void bookDoesntExistTest() {
-    final ResponseEntity<?> response = route.addCopy(73);
-    assertEquals(404, response.getStatusCode().value(), "Should receive an error code");
+    assertEquals(HttpStatus.NOT_FOUND, route.addCopy(73).getStatusCode(),
+          "Should receive an error code");
   }
 
   @Test
     void availableBooksTest() {
     final ResponseEntity<?> response = route.getAvailableBooks();
-    assertEquals(200, response.getStatusCode().value(), "Should get a success code");
-    Object body = response.getBody();
+    HttpStatusCode status = response.getStatusCode();
+    assertEquals(HttpStatus.OK, status, "There should be available books.");
+    final Object body = response.getBody();
     assertFalse(body instanceof String, "Response body should be a string");
   }
 
   @Test
    void addBookTest() {
-    final ResponseEntity<?> response = route.addCopy(0);
-    assertEquals(200, response.getStatusCode().value(), "Should get a success code");
+    final ResponseEntity<?> response = route.addCopy(1);
+    HttpStatusCode status = response.getStatusCode();
+    assertEquals(HttpStatus.OK, status, "Should get a success code");
   }
 
   @Test
-  void getBookBooksNullTests() {
-    MockApiService mock = new MockApiService();
+  void booksNullTests() {
+    final MockApiService mock = new MockApiService();
     if (mock.getBooks() != null) {
       mock.getBooks().clear();
     }
-    RouteController controller = new RouteController(mock);
+    final RouteController controller = new RouteController(mock);
 
-    ResponseEntity<?> response = controller.getBook(99);
-    assertEquals(404, response.getStatusCode().value(), "Should receive an error code");
+    final ResponseEntity<?> response = controller.getBook(99);
+    HttpStatusCode status = response.getStatusCode();
+    assertEquals(HttpStatus.NOT_FOUND, status, "Should receive an error code");
     assertInstanceOf(String.class, response.getBody());
   }
 
   @Test
-  void getRecommendedBooksTest(){
-    MockApiService mock = new MockApiService();
+  void recBooksTest() {
+    final MockApiService mock = new MockApiService();
     if (mock.getBooks() != null) {
       mock.getBooks().clear();
-    }
 
-    for (int i = 0; i < 15; i++){
-      Book book = new Book();
-      for(int j = 0; j < i; j++){
-        book.checkoutCopy();
+      for (int i = 0; i < 15; i++) {
+        mock.getBooks().add(createBook(i));
       }
-      mock.getBooks().add(book);
-    }
 
-    RouteController controller = new RouteController(mock);
-    ResponseEntity<?> response = controller.getRecommendedBooks();
-    assertEquals(200, response.getStatusCode().value(), "Should get a success code");
+      final RouteController controller = new RouteController(mock);
+      final ResponseEntity<?> response = controller.getRecommendedBooks();
+      HttpStatusCode status = response.getStatusCode();
+      assertEquals(HttpStatus.OK, status, "Should get a success code");
+    }
   }
 
   @Test
-  void failToGetRecommendedBooksTest(){
-    MockApiService mock = new MockApiService();
+  void failRecBooksTest() {
+    final MockApiService mock = new MockApiService();
     if (mock.getBooks() != null) {
       mock.getBooks().clear();
-    }
 
-    for (int i = 0; i < 5; i++){
-      Book book = new Book();
-      for(int j = 0; j < i; j++){
-        book.checkoutCopy();
+
+      for (int i = 0; i < 5; i++) {
+        mock.getBooks().add(createBook(i));
       }
-      mock.getBooks().add(book);
-    }
 
-    RouteController controller = new RouteController(mock);
-    ResponseEntity<?> response = controller.getRecommendedBooks();
-    assertEquals(500, response.getStatusCode().value(), "Should get a failure code, not enough books.");
+      final RouteController controller = new RouteController(mock);
+      final ResponseEntity<?> response = controller.getRecommendedBooks();
+      HttpStatusCode status = response.getStatusCode();
+      assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, status,
+            "Should get a failure code, not enough books.");
+    }
   }
 
   @Test
   void checkoutBookSuccessTest() {
-    MockApiService mock = new MockApiService();
+    final MockApiService mock = new MockApiService();
 
-    if(mock.getBooks() != null) {
+    if (mock.getBooks() != null) {
       mock.getBooks().clear();
     }
 
-    Book book = new Book();
+    final Book book = new Book();
     book.setId(2);
     book.setTotalCopies(4);
     mock.getBooks().add(book);
 
-    RouteController controller = new RouteController(mock);
+    final RouteController controller = new RouteController(mock);
 
-    ResponseEntity<?> response = controller.checkout(2);
-
-    assertEquals(200, response.getStatusCode().value(), "Should get a success code");
+    final ResponseEntity<?> response = controller.checkout(2);
+    HttpStatusCode status = response.getStatusCode();
+    assertEquals(HttpStatus.OK, status, "Should get a success code");
   }
 
   @Test
   void checkoutBookFailTest() {
-    MockApiService mock = new MockApiService();
-    if(mock.getBooks() != null) {
+    final MockApiService mock = new MockApiService();
+    if (mock.getBooks() != null) {
       mock.getBooks().clear();
     }
 
-    Book book = new Book();
+    final Book book = new Book();
     book.setId(2);
     mock.getBooks().add(book);
-    RouteController controller = new RouteController(mock);
-    ResponseEntity<?> response = controller.checkout(99);
+    final RouteController controller = new RouteController(mock);
+    final ResponseEntity<?> response = controller.checkout(99);
+    HttpStatusCode status = response.getStatusCode();
+    assertEquals(HttpStatus.NOT_FOUND, status, "Should get a not-found code");
+  }
 
-    assertEquals(404, response.getStatusCode().value(), "Should get a not-found code");
+  private Book createBook(final int checkoutCount) {
+    final Book book = new Book();
+    for (int i = 0; i < checkoutCount; i++) {
+      book.checkoutCopy();
+    }
+    return book;
   }
 
 }

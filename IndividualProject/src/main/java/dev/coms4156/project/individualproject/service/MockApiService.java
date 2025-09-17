@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.coms4156.project.individualproject.model.Book;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,23 +15,24 @@ import org.springframework.stereotype.Service;
 @Service
 public class MockApiService {
 
-  private ArrayList<Book> books;
+  private List<Book> books;
 
   /**
    * Constructs a new {@code MockApiService} and loads book data from a JSON file located at
    * {@code resources/mockdata/books.json}.
-   * If the file is not found, an empty list of books is initialized. If the file is found but
-   * cannot be parsed, an error message is printed and no data is loaded.
+   * If the file input not found, an empty list of books input initialized.
+   * If the file input found but cannot be parsed, an error message input
+   * printed and no data input loaded.
    */
   public MockApiService() {
-    try (InputStream is = Thread.currentThread().getContextClassLoader()
+    try (InputStream input = Thread.currentThread().getContextClassLoader()
         .getResourceAsStream("mockdata/books.json")) {
-      if (is == null) {
+      if (input == null) {
         System.err.println("Failed to find mockdata/books.json in resources.");
         books = new ArrayList<>(0);
       } else {
-        ObjectMapper mapper = new ObjectMapper();
-        books = mapper.readValue(is, new TypeReference<ArrayList<Book>>(){});
+        final ObjectMapper mapper = new ObjectMapper();
+        books = mapper.readValue(input, new TypeReference<>(){});
         System.out.println("Successfully loaded books from mockdata/books.json.");
       }
     } catch (Exception e) {
@@ -38,7 +40,7 @@ public class MockApiService {
     }
   }
 
-  public ArrayList<Book> getBooks() {
+  public List<Book> getBooks() {
     return books;
   }
 
@@ -49,9 +51,9 @@ public class MockApiService {
    * @param newBook A {@code Book} object containing the updated information
    *                to replace the existing entry.
    */
-  public void updateBook(Book newBook) {
-    ArrayList<Book> tmpBooks = new ArrayList<>();
-    for (Book book : books) {
+  public void updateBook(final Book newBook) {
+    final List<Book> tmpBooks = new ArrayList<>();
+    for (final Book book : books) {
       if (book.equals(newBook)) {
         tmpBooks.add(newBook);
       } else {

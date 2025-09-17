@@ -7,17 +7,20 @@ import dev.coms4156.project.individualproject.service.MockApiService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest;
 
 /**
  * This class contains the unit tests for the MockApiService class.
  */
 @SpringBootTest
- class MockApiServiceTests {
+final class MockApiServiceTests {
     /**
      * MockAPIService.
      */
     /* package */ private static MockApiService mock;
+
+  private MockApiServiceTests() {
+    // Private constructor to prevent PMD error.
+  }
 
   /**
    * Javadoc comment, before all functionality.
