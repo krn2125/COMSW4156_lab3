@@ -12,4 +12,4 @@ I also affirm that I will be 100% honest when evaluating the performance of myse
 
 Finally I affirm that I will not attempt to find any loopholes in these policies for the benefit of myself or others enrolled in the course presently or possibly in the future.
 
-    Signed: Katherine Newton krn2125, 9/12/2025
+    Signed: Katherine Newton krn2125, 9/16/2025

@@ -8,3 +8,6 @@ Lab 2 Recommendation System - for ranking books by popularity:
 https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collections.html#sort(java.util.List)
 https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Comparator.html
 https://docs.oracle.com/javase/tutorial/collections/algorithms/index.html
+
+Lab 2 HTTP Updated Use
+https://www.baeldung.com/spring-boot-httpstatuscode
