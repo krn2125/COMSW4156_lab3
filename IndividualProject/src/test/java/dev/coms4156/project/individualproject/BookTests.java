@@ -5,11 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import dev.coms4156.project.individualproject.model.Book;
-import java.lang.reflect.Array;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+//import java.lang.reflect.Array;
+//import java.time.LocalDate;
+//import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
+//import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,7 +33,7 @@ import org.springframework.boot.test.context.SpringBootTest;
   }
 
   @Test
-  public void dummytest() {
+  public void dumbTest() {
     System.out.println("Hello World");
     assertTrue(true);
   }
@@ -51,7 +51,7 @@ import org.springframework.boot.test.context.SpringBootTest;
    void hasMultipleAuthorsTest() {
     assertFalse(book.hasMultipleAuthors());
     final ArrayList<String> authors = new ArrayList<>();
-    authors.add("Harry Cowen");
+    authors.add("Harry Cohen");
     authors.add("J. K. Rowling");
     final ArrayList<String> subjects = new ArrayList<>();
     authors.add("Romance");
