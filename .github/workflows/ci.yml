@@ -20,5 +20,7 @@ jobs:
         distribution: 'temurin'
     - name: Compile
       run: mvn compile
+      working-directory: ./IndividualProject
     - name: Test
       run: mvn test
+      working-directory: ./IndividualProject
