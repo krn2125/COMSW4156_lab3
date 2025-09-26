@@ -2,6 +2,7 @@ package dev.coms4156.project.individualproject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -98,4 +99,41 @@ final class BookTests {
     assertTrue(book.returnCopy(book.checkoutCopy()), "Should"
           + " be able to return a book if given a valid due date");
   }
+
+  @Test
+  void deleteCopyWhenNoCopiesTest() {
+    Book book1 = new Book();
+    book1.checkoutCopy();
+    assertFalse(book1.deleteCopy(), "Should not be able to delete a copy");
+  }
+
+  @Test
+  void deleteCopyWhenNoCopiesTest2() {
+    String validDueDate = book.checkoutCopy();
+    assertFalse(book.returnCopy("invalid"), "Should not accept this due date");
+  }
+
+  @Test
+  void booksNotEqualsTest() {
+    Book  book1 = new Book();
+    book1.checkoutCopy();
+    final List<String> authors = new ArrayList<>();
+    authors.add("Harry Cohen");
+    authors.add("J. K. Rowling");
+    final List<String> subjects = new ArrayList<>();
+    authors.add("Romance");
+
+    final Book book2 = new Book("Gone With the Wind", authors, "English", "Your Mom's House",
+          "9/10/2025", "Harper Collins", subjects, 1, 3, 4);
+
+    assertNotEquals(book1, book2, "Different books are not the same");
+  }
+
+  @Test
+  void bookNotEqualsNullTest() {
+    Book  book1 = new Book();
+    assertNotEquals(book1, null, "Different books are not the same");
+  }
+
+
 }

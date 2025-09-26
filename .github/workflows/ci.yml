@@ -1,0 +1,23 @@
+name: Lab3 CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Units and Integration Tests
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup JDK
+      uses: actions/setup-java@v4
+      with:
+        java-version: '11''
+    - name: Compile
+      run: mvn compile
+    - name: Test
+      run: mvn test

@@ -174,6 +174,13 @@ final class RouteControllerTests {
     assertEquals(HttpStatus.NOT_FOUND, status, "Should get a not-found code");
   }
 
+  @Test
+  void deleteNoCopyTest() {
+    final ResponseEntity<?> response = route.checkout(999);
+    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode(), "Should return not found");
+
+  }
+
   private Book createBook(final int checkoutCount) {
     final Book book = new Book();
     for (int i = 0; i < checkoutCount; i++) {
