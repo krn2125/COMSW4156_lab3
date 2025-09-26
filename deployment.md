@@ -1,0 +1,7 @@
+Platform as a Service, also known as PaaS, is a cloud computing service model that acts as a foundation for technical developers to do everything from building to management of their applications. It has many built-in tools for software (and other) development as well as for service hosting over the internet. It performs like a layer between IaaS, Infrastructure as a Service, and SaaS, Software as a service, and allows users to make heavily customized applications.
+
+In Continuous Integration/Continuous Delivery, also known as CI/CD, PaaS includes tools for debugging, code editing, and pipeline management. Many of the various PaaS platforms support automated workflows like CI/CD, which helps with continuous monitoring and updating. PaaS also can automate the deployment process for the platform being built, and can streamline efficiency, speed, scalability, and reduce operational overhead.
+
+There are an abundance of valuable aspects about the role PaaS can play in CI/CD. Communication PaaS, or CPaaS, offers pre-built frameworks that enable developers to add real-time communication capabilities to their applications. Mobile PaaS, MPaaS, acts similarly for mobile application setup.
+
+Lastly, PaaS's cost model is unique. PaaS uses a consumption, pay-as-you-go pricing model that charges based on computing resources users use. This, in addition to their dynamic resource allocation helps to reduce waste and optimize resource utilization.

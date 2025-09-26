@@ -1,6 +1,7 @@
 package dev.coms4156.project.individualproject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import dev.coms4156.project.individualproject.model.Book;
 import dev.coms4156.project.individualproject.service.MockApiService;
@@ -49,6 +50,12 @@ final class MockApiServiceTests {
     }
     mock.updateBook(new Book());
     assertEquals(mock.getBooks().get(0).getTotalCopies(), 1, "There should be one copy available");
+  }
+
+  @Test
+  void fetchWhenNullTest() {
+    MockApiService mock = new MockApiService();
+    assertNotEquals(mock, null, "MockAPIService should be instantiated");
   }
 
 }
