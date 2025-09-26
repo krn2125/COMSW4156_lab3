@@ -15,3 +15,6 @@ https://www.baeldung.com/spring-boot-httpstatuscode
 README Help  
 https://stackoverflow.com/questions/24575680/new-lines-inside-paragraph-in-readme-md  
 
+
+CI/CD Issues Debugging
+https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
